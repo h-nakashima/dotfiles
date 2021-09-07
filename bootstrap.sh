@@ -5,6 +5,7 @@ cd "$(dirname "${BASH_SOURCE}")";
 git pull origin main;
 
 function doIt() {
+	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)";
 	rsync --exclude ".git/" \
 		--exclude ".DS_Store" \
 		--exclude ".osx" \
@@ -12,7 +13,7 @@ function doIt() {
 		--exclude "README.md" \
 		--exclude "LICENSE-MIT.txt" \
 		-avh --no-perms . ~;
-	source ~/.bash_profile;
+	source ~/.zsh_profile;
 }
 
 if [ "$1" == "--force" -o "$1" == "-f" ]; then

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-# Make vim the default editor.
-export EDITOR='vim';
+# Make nano the default editor.
+export EDITOR='nano';
+export SVN_EDITOR='nano'
 
 # Enable persistent REPL history for `node`.
 export NODE_REPL_HISTORY=~/.node_history;
@@ -13,15 +14,19 @@ export NODE_REPL_MODE='sloppy';
 # Make Python use UTF-8 encoding for output to stdin, stdout, and stderr.
 export PYTHONIOENCODING='UTF-8';
 
-# Increase Bash history size. Allow 32³ entries; the default is 500.
-export HISTSIZE='32768';
-export HISTFILESIZE="${HISTSIZE}";
-# Omit duplicates and commands that begin with a space from history.
-export HISTCONTROL='ignoreboth';
+# メモリに保存される履歴の件数。(保存数だけ履歴を検索できる)
+export HISTSIZE=1000000
+# HISTFILE で指定したファイルに保存される履歴の件数
+export HISTFILESIZE=2000000
+# 入力が最後のヒストリと一致する場合は記録しない
+export HISTCONTROL=ignoredups
+# 以下のコマンドは記録しない(?や* も使える)
+#export HISTIGNORE=pwd:ls:la:ll:lla:exit:history*
+export HISTIGNORE=pwd:ls:la:ll:lla:exit
 
 # Prefer US English and use UTF-8.
-export LANG='en_US.UTF-8';
-export LC_ALL='en_US.UTF-8';
+export LANG='ja_JP.UTF-8';
+export LC_ALL='ja_JP.UTF-8';
 
 # Highlight section titles in manual pages.
 export LESS_TERMCAP_md="${yellow}";
@@ -33,5 +38,44 @@ export MANPAGER='less -X';
 # https://stackoverflow.com/a/42265848/96656
 export GPG_TTY=$(tty);
 
-# Hide the “default interactive shell is now zsh” warning on macOS.
-export BASH_SILENCE_DEPRECATION_WARNING=1;
+# Android NDK
+export ANDROIDNDK_HOME=/Developer/android-ndk-r8b
+export ANDROIDSDK_HOME=/Developer/android-sdks
+export PATH=$PATH:~/bin:$ANDROIDSDK_HOME/platform-tools:$ANDROIDNDK_HOME
+
+# npm の設定
+export NODE_PATH=$HOME/.npm/lib:$PATH
+export PATH=$HOME/.npm/bin:$PATH
+export MANPATH=$HOME/.npm/man:$MANPATH
+
+# brew
+export PATH=$PATH:/opt/homebrew/bin
+
+# anyenv
+eval "$(anyenv init -)"
+
+# rbenv
+eval "$(rbenv init -)"
+
+# Go
+export GOPATH=$HOME/go
+export PATH=$GOPATH/bin:$PATH
+
+export PATH=$PATH:$HOME/.nodebrew/current/bin
+
+# yarn
+export PATH="$HOME/.yarn/bin:$PATH"
+export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
+
+# pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+# nodenv
+export PATH="$HOME/.anyenv/envs/nodenv/bin:$PATH"
+eval "$(nodenv init -)"
+if [ -d ${HOME}/node_modules/.bin ]; then
+    export PATH=${PATH}:${HOME}/node_modules/.bin
+fi
+
