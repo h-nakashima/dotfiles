@@ -14,7 +14,7 @@ BREW_PREFIX=$(brew --prefix)
 # Install a modern version of zsh.
 brew install zsh
 
-# Switch to using brew-installed bash as default shell
+# Switch to using brew-installed zsh as default shell
 if ! fgrep -q "${BREW_PREFIX}/bin/zsh" /etc/shells; then
   echo "${BREW_PREFIX}/bin/zsh" | sudo tee -a /etc/shells;
   chsh -s "${BREW_PREFIX}/bin/zsh";
@@ -31,6 +31,7 @@ brew install peco
 brew install ghq
 brew install gibo
 brew install anyenv
+brew install mas
 
 # Install cask apps
 brew install --cask google-file-stream
@@ -38,6 +39,7 @@ brew install --cask zoom
 brew install --cask discord
 brew install --cask google-chrome
 brew install --cask visual-studio-code
+brew install --cask steermouse
 
 # Remove outdated versions from the cellar.
 brew cleanup
