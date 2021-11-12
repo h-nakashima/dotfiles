@@ -9,8 +9,5 @@ xcode-select --install
 # Change macOS settings.
 /bin/bash .macos
 
-# Install apps from brew.sh file.
-/bin/bash brew.sh
-
-# Install apps from AppStore.
-/bin/bash .macos_apps
+# Install apps from brew bundle
+brew bundle
