@@ -1,6 +1,5 @@
 tap "homebrew/bundle"
 tap "homebrew/services"
-tap "ci7lus/miraktest"
 
 # General
 brew "anyenv"
@@ -70,23 +69,3 @@ vscode "ms-vsliveshare.vsliveshare-pack"
 vscode "redhat.vscode-yaml"
 vscode "unifiedjs.vscode-mdx"
 vscode "xabikos.JavaScriptSnippets"
-
-
-# Private
-brew "youtube-dl"
-brew "yt-dlp"
-cask "discord"
-cask "docker"
-cask "dropbox"
-cask "evernote"
-cask "google-drive"
-cask "mimestream"
-cask "miraktest"
-cask "nvidia-geforce-now"
-cask "parallels"
-cask "vb-cable"
-cask "webex"
-cask "yacreader"
-cask "zoom"
-mas "Evernote", id: 406056744
-mas "LINE", id: 539883307
