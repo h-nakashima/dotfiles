@@ -1,6 +1,8 @@
-tap "ci7lus/miraktest"
 tap "homebrew/bundle"
 tap "homebrew/services"
+tap "ci7lus/miraktest"
+
+# General
 brew "anyenv"
 brew "awscli"
 brew "glib"
@@ -21,48 +23,25 @@ brew "ssh-copy-id"
 brew "streamlink"
 brew "telnet"
 brew "wget"
-brew "youtube-dl"
-brew "yt-dlp"
 cask "alt-tab"
 cask "appcleaner"
 cask "caffeine"
-cask "discord"
-cask "docker"
-cask "dropbox"
-cask "evernote"
 cask "google-chrome"
-cask "google-drive"
 cask "google-japanese-ime"
-cask "mimestream"
-cask "miraktest"
 cask "miro"
-cask "nvidia-geforce-now"
-cask "parallels"
 cask "postman"
 cask "skitch"
 cask "steermouse"
 cask "swiftdefaultappsprefpane"
-cask "vb-cable"
 cask "visual-studio-code"
 cask "vivaldi"
 cask "vlc"
-cask "webex"
-cask "yacreader"
-cask "zoom"
 mas "1Password 7", id: 1333542190
-mas "Airmail", id: 918858936
 mas "CotEditor", id: 1024640650
-mas "Evernote", id: 406056744
-mas "LINE", id: 539883307
 mas "Magnet", id: 441258766
-mas "Microsoft Remote Desktop", id: 1295203466
-mas "Numbers", id: 409203825
-mas "Pages", id: 409201541
 mas "QR Journal", id: 483820530
-mas "Tailscale", id: 1475387142
 mas "The Unarchiver", id: 425424353
 mas "Tot", id: 1491071483
-mas "Tweetbot", id: 1384080005
 mas "WinArchiver Lite", id: 414855915
 vscode "42Crunch.vscode-openapi"
 vscode "bierner.markdown-mermaid"
@@ -91,3 +70,23 @@ vscode "ms-vsliveshare.vsliveshare-pack"
 vscode "redhat.vscode-yaml"
 vscode "unifiedjs.vscode-mdx"
 vscode "xabikos.JavaScriptSnippets"
+
+
+# Private
+brew "youtube-dl"
+brew "yt-dlp"
+cask "discord"
+cask "docker"
+cask "dropbox"
+cask "evernote"
+cask "google-drive"
+cask "mimestream"
+cask "miraktest"
+cask "nvidia-geforce-now"
+cask "parallels"
+cask "vb-cable"
+cask "webex"
+cask "yacreader"
+cask "zoom"
+mas "Evernote", id: 406056744
+mas "LINE", id: 539883307
