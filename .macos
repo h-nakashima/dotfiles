@@ -12,5 +12,11 @@ sudo softwareupdate --install-rosetta
 # Change macOS settings.
 /bin/bash .macos_settings
 
-# Install apps from brew bundle
+# Install apps from brew bundle.
 brew bundle
+
+# Setting anyenv.
+anyenv install --init
+anyenv install rbenv
+anyenv install pyenv
+anyenv install nodenv
