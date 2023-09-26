@@ -69,3 +69,8 @@ vscode "ms-vsliveshare.vsliveshare-pack"
 vscode "redhat.vscode-yaml"
 vscode "unifiedjs.vscode-mdx"
 vscode "xabikos.JavaScriptSnippets"
+
+# Work
+mas "Mattermost Desktop", id: 1614666244
+cask "skype"
+cask "intellij-idea-ce"
