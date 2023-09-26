@@ -35,6 +35,7 @@ cask "swiftdefaultappsprefpane"
 cask "visual-studio-code"
 cask "vivaldi"
 cask "vlc"
+cask "steermouse"
 mas "1Password 7", id: 1333542190
 mas "CotEditor", id: 1024640650
 mas "Magnet", id: 441258766
