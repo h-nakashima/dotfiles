@@ -34,6 +34,7 @@ cask "alt-tab"
 cask "appcleaner"
 cask "caffeine"
 cask "cyberduck"
+cask "docker-desktop"
 cask "google-chrome"
 cask "google-japanese-ime"
 cask "microsoft-teams"
@@ -46,6 +47,7 @@ cask "swiftdefaultappsprefpane"
 cask "visual-studio-code"
 cask "vivaldi"
 cask "vlc"
+cask "zoom"
 mas "CotEditor", id: 1024640650
 mas "Magnet", id: 441258766
 mas "QR Journal", id: 483820530
@@ -85,20 +87,27 @@ vscode "unifiedjs.vscode-mdx"
 vscode "xabikos.JavaScriptSnippets"
 
 
+{{- if .isPersonal }}
 # Private
 brew "ffmpeg"
 brew "yt-dlp"
 cask "bambu-studio"
 cask "discord"
-cask "docker-desktop"
-cask "dropbox"
 cask "google-drive"
 cask "makemkv"
 cask "mimestream"
-cask "miraktest"
 cask "parallels"
-cask "vb-cable"
 cask "webex"
 cask "yacreader"
-cask "zoom"
 mas "LINE", id: 539883307
+{{- end }}
+
+{{- if not .isPersonal }}
+# Work
+mas "Mattermost Desktop", id: 1614666244
+cask "figma"
+cask "intellij-idea"
+cask "postman"
+cask "miro"
+cask "skitch"
+{{- end }}

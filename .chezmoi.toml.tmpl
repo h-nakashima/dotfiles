@@ -1,0 +1,13 @@
+{{ $isPersonal := promptBoolOnce . "isPersonal" "Is this a personal machine (yes/no)" }}
+{{ $name := promptStringOnce . "name" "What is your git user name" "h-nakashima" }}
+{{ $email := promptStringOnce . "email" "What is your git email address" "h-nakashima@users.noreply.github.com" }}
+
+[data]
+    isPersonal = {{ $isPersonal }}
+    name = {{ $name | quote }}
+    email = {{ $email | quote }}
+
+sourceDir = "~/git/github.com/h-nakashima/dotfiles"
+[sourceVCS]
+    autoCommit = false
+    autoPush = false
