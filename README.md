@@ -85,13 +85,12 @@ GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
 git config --global user.email "$GIT_AUTHOR_EMAIL"
 ```
 
-### Sensible macOS defaults
+### Automated Setup
 
-When setting up a new Mac, you may want to set some sensible macOS defaults. These scripts are intentionally excluded from `chezmoi` sync and should be run manually from the repository directory:
-
-```bash
-./.macos
-```
+When `chezmoi apply` is executed, it automatically handles everything behind the scenes:
+- **macOS Settings**: Sets sensible macOS defaults and basic tools (runs once).
+- **Homebrew Packages**: Installs everything in `Brewfile` (automatically reruns whenever `Brewfile` is updated).
+- **Oh My Zsh**: Ensures your shell environment is properly set up.
 
 ## Security: Keeping credentials out of the repository
 
