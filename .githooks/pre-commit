@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+# 1. Run git-secrets to prevent committing credentials
+if command -v git-secrets >/dev/null 2>&1; then
+    git secrets --pre_commit_hook -- "$@"
+    if [ $? -ne 0 ]; then
+        exit 1
+    fi
+fi
+
+# 2. Check chezmoi templates for syntax errors before committing
+# This runs `chezmoi execute-template` on the staged contents
+has_errors=0
+
+for file in $(git diff --cached --name-only | grep '\.tmpl$'); do
+    # .chezmoi.toml.tmpl requires --init because prompt functions are only defined in init scope
+    if [[ "$file" == *".chezmoi.toml.tmpl" ]]; then
+        git show :"$file" | chezmoi execute-template --init > /dev/null 2>&1
+    else
+        git show :"$file" | chezmoi execute-template > /dev/null 2>&1
+    fi
+
+    if [ $? -ne 0 ]; then
+        echo "❌ Template syntax error or missing variable detected in: $file"
+        echo "--- Error Details ---"
+        # Run again without 2>&1 suppression to show the exact error from chezmoi
+        if [[ "$file" == *".chezmoi.toml.tmpl" ]]; then
+            git show :"$file" | chezmoi execute-template --init > /dev/null
+        else
+            git show :"$file" | chezmoi execute-template > /dev/null
+        fi
+        echo "---------------------"
+        has_errors=1
+    fi
+done
+
+if [ $has_errors -ne 0 ]; then
+    echo "⚠️ Commit aborted due to template errors."
+    exit 1
+fi

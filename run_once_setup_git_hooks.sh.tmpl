@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# Chezmoiのソースリポジトリに移動してフックを有効化
+cd "{{ .chezmoi.sourceDir }}"
+git config core.hooksPath .githooks
