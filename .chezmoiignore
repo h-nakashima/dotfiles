@@ -1,0 +1,7 @@
+README.md
+LICENSE-MIT.txt
+Brewfile
+.git/
+bootstrap.sh
+.macos
+.macos_settings

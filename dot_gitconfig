@@ -1,0 +1,52 @@
+[user]
+	useConfigOnly = true
+	email = h-nakashima@users.noreply.github.com
+	name = h-nakashima
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAb7w7B32JAKGoseVXdr33JdXKeY1dVpLh477sutFXB/
+
+[color]
+	ui = auto
+[core]
+	editor = nano
+	quotepath = false
+	excludesfile = $HOME/.gitignore
+	precomposeunicode = true
+	autocrlf = false
+[rebase]
+	autostash = true
+[push]
+	default = simple
+[alias]
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	lga = log --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	d1 = diff HEAD~            # HEADから1つ前とdiff
+	d2 = diff HEAD~~           # HEADから2つ前とdiff
+	d3 = diff HEAD~~~          # HEADから3つ前とdiff
+	d4 = diff HEAD~~~~         # HEADから4つ前とdiff
+	d5 = diff HEAD~~~~~        # HEADから5つ前とdiff
+	d10 = diff HEAD~~~~~~~~~~  # HEADから10前とdiff
+	gsub = !git-gsub.rb
+	s = status
+	d = diff
+	c = commit
+[filter "media"]
+	clean = git-media-clean %f
+	smudge = git-media-smudge %f
+[pager]
+#	log = diff-highlight|less -c
+#	show = diff-highlight|less -c
+#	diff = diff-highlight|less -c
+[ghq]
+	root = ~/git
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	# 1Password SSH agent
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+[commit]
+	gpgsign = true
