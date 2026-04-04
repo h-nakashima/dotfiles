@@ -1,24 +1,13 @@
 # Shortcuts
 alias g="git"
 
-if test (uname -s) != "Darwin"
-    if grep -q Microsoft /proc/version 2>/dev/null
-        alias open='explorer.exe'
-    else
-        alias open='xdg-open'
-    end
-end
-
 
 alias l="ls -lF"
 alias la="ls -lAF"
 alias lsd="ls -lF | grep --color=never '^d'"
 
 alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
 
-alias sudo='sudo '
 alias week='date +%V'
 alias update='sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update; sudo gem cleanup'
 
