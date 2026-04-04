@@ -1,36 +1,49 @@
-# h-nakashima’s dotfiles
+# h-nakashima's dotfiles
 
 *他の言語で読む: [English](README.md), [日本語](README-ja.md).*
 
-## インストール方法
+## 概要
 
-このリポジトリは [chezmoi](https://chezmoi.io/) を使用して管理されています。
+[chezmoi](https://chezmoi.io/) で管理する、**Fish Shell** + **Starship** を使った爆速でモダンな開発環境です。
 
-**注意:** これらのドットファイルを試したい場合は、まずこのリポジトリをフォークし、コードをレビューして、不要な設定を削除してください。それが何を意味するのかを理解せずに私の設定を盲目的に使用しないでください。自己責任でご使用ください！
+**注意:** これらのドットファイルを試したい場合は、まずこのリポジトリをフォークし、コードをレビューして、不要な設定を削除してください。自己責任でご使用ください！
 
-### クイックインストール (chezmoiを使用)
+## インストール
 
-新しいマシンに初期の手っ取り早いセットアップを行いたい場合は、`chezmoi` を使えば1行のコマンドで初期化とすべての適用（Oh My Zsh のインストールを含む）が行われます：
+### クイックインストール（新しいマシンへのセットアップ）
+
+以下の1行のコマンドで `chezmoi` のインストール・リポジトリのクローン・全設定の適用まで自動で行われます：
 
 ```bash
 sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply h-nakashima
 ```
 
-今後、このリポジトリの最新の変更を適用してアップデートしたい場合は、以下のコマンドを実行します：
+このコマンドにより以下が自動的に実行されます：
+- Homebrew パッケージのインストール（`Brewfile` に基づく）
+- **Fish** と **Starship** のインストール
+- Fish をデフォルトシェルに設定（`chsh`）
+- Zsh の履歴を Fish の履歴形式に移行
+- macOS 設定の適用（初回のみ）
+- Git フックの設定（git-secrets によるセキュリティ保護）
+
+以降、最新の変更を取り込む場合：
 
 ```bash
 chezmoi update
 ```
 
-### ローカル開発の設定 (ghq や任意のパスを使用する場合)
+### ローカル開発環境のセットアップ
 
-このリポジトリを特定の場所（例: `~/git/github.com/h-nakashima/dotfiles`）にクローンしている場合、`chezmoi` にそのフォルダをソースディレクトリとして認識させることができます。
+リポジトリを特定の場所にクローンして管理する場合（例：`ghq` を使う場合）：
 
-1. リポジトリをクローンします。
-2. `~/.config/chezmoi/chezmoi.toml` を作成し、以下の内容を設定します：
+1. リポジトリをクローンします：
+   ```bash
+   ghq get h-nakashima/dotfiles
+   ```
+2. `~/.config/chezmoi/chezmoi.toml` を作成します：
    ```toml
    sourceDir = "~/git/github.com/h-nakashima/dotfiles"
-   
+
    [sourceVCS]
        autoCommit = false
        autoPush = false
@@ -40,102 +53,89 @@ chezmoi update
    chezmoi apply
    ```
 
-## 日頃のワークフローと同期
+## シェル環境
 
-`chezmoi` を使うと、ホームディレクトリとこのリポジトリの間をきれいに分離して保つことができます。
+Zsh の代わりに **Fish Shell** + **Starship** を使用しています。
 
-### ファイルの編集
-ドットファイルを直接編集し、かつ自動的にリポジトリ側に変更を反映させるには：
+| 機能 | 操作方法 |
+|---|---|
+| プロンプト | Starship（gitブランチ・言語バージョン等をリアルタイム表示） |
+| 履歴検索 | `Ctrl+R`（peco連携） |
+| ファイル検索 | `Ctrl+F`（peco連携） |
+| Git ショートカット | `Ctrl+G, L`（ghqリポジトリ移動）、`Ctrl+G, B`（ブランチ切替）、`Ctrl+G, A`（git add） |
+| ディレクトリ履歴 | `Alt+←` / `Alt+→`（`prevd` / `nextd`） |
+| エイリアス | `~/.config/fish/conf.d/aliases.fish` |
+| 環境変数 | `~/.config/fish/conf.d/exports.fish` |
+
+## 日頃のワークフロー
+
+### ドットファイルを編集する
 ```bash
-chezmoi edit ~/.zshrc
+chezmoi edit ~/.config/fish/conf.d/aliases.fish
 ```
 
-### ローカルで直接編集してしまった場合（取り込み）
-もし `~/.zshrc` などをホームディレクトリで直接編集してしまい、その変更をリポジトリ（chezmoi側）に吸収させたい場合は：
+### ローカルで直接編集してしまった変更をリポジトリに吸収する
 ```bash
-chezmoi add ~/.zshrc
+chezmoi add ~/.config/fish/conf.d/aliases.fish
+```
+
+### 変更をプッシュする
+```bash
+cd ~/git/github.com/h-nakashima/dotfiles
+git add -A && git commit -m "変更内容" && git push
 ```
 
 ## カスタマイズ
 
-### `$PATH` の指定
+### フォークせずに独自設定を追加する
 
-`~/.path` ファイルが存在する場合、各種判定が行われる前に他のファイルと一緒に読み込まれます。
-`/usr/local/bin` を `$PATH` に追加する `~/.path` ファイルの例：
+`~/.extra` が存在する場合は個人的な設定や機密情報を記述できます（このファイルはリポジトリにコミットされません）：
 
-```bash
-export PATH="/usr/local/bin:$PATH"
+```fish
+# ~/.extra (Fish 構文 — このファイルは絶対にコミットしないでください)
+
+# API キー
+set -gx OPENAI_API_KEY "sk-..."
+set -gx ANTHROPIC_API_KEY "..."
+
+# マシン固有の設定
+set -gx WORK_PROXY "http://proxy.example.com:8080"
 ```
 
-### フォークせずに独自のコマンドを追加する
+### 個人用 / 仕事用の環境分離
 
-`~/.extra` ファイルが存在する場合、他のファイルと一緒に読み込まれます。このリポジトリ全体をフォークせずに独自のコマンドをいくつか追加したり、公開リポジトリにはコミットしたくない設定を追加するのに便利です。
+`chezmoi init` 時に以下を質問されます：
+- このマシンは個人用ですか？（`isPersonal`）
+- Git のユーザー名とメールアドレス
 
-`~/.extra` の例は以下の通りです：
-
-```bash
-# Git credentials
-# 誤って自分の名前でコミットするのを防ぐため、リポジトリには含めません
-GIT_AUTHOR_NAME="h-nakashima"
-GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
-git config --global user.name "$GIT_AUTHOR_NAME"
-GIT_AUTHOR_EMAIL="h-nakashima@users.noreply.github.com"
-GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
-git config --global user.email "$GIT_AUTHOR_EMAIL"
-```
-
-### 自動セットアップ機構
-
-`chezmoi apply` を実行時に、裏側で以下のプロセスが自動化されて実行されます：
-- **macOS 設定**: 合理的な macOS のデフォルト設定や基礎ツールのインストール（初回のみ実行）。
-- **Homebrew パッケージ**: `Brewfile` に記載されたパッケージのインストール（`Brewfile` が更新されたタイミングで自動再実行）。
-- **Oh My Zsh**: シェル環境のセットアップ。
-
-## セキュリティ: クレデンシャル（機密情報）の管理
-
-### ルール: 追跡対象のファイルに機密情報を絶対に入れない
-
-このdotfilesリポジトリは公開されています。**APIキー、パスワード、トークンなどの機密情報は絶対にコミットしないでください。**
-
-機密情報は以下のいずれかの場所に配置する必要があります：
-
-- **`~/.extra`** — chezmoi によって無視される機密データ用のファイル。
-- **`~/.netrc`** — `~/.gitignore` (`dot_gitignore`) によってグローバルに除外されます。
-- **`~/.env`** — `~/.gitignore` (`dot_gitignore`) によってグローバルに除外されます。
-
-### `~/.extra` によるシークレット管理
-
-`~/.extra` が存在する場合、`~/.zsh_profile` によって自動的に読み込まれます。
-APIキーや個人的な設定はここに配置してください：
+これにより `Brewfile` と `.gitconfig` の適用内容が切り替わります。
+設定内容はいつでも確認・編集できます：
 
 ```bash
-# ~/.extra の例 (このファイルは絶対にリポジトリにコミットしないでください)
-
-# API Keys
-export OPENAI_API_KEY="sk-..."
-export ANTHROPIC_API_KEY="..."
-
-# Personal Git configuration
-export GIT_AUTHOR_NAME="h-nakashima"
-export GIT_AUTHOR_EMAIL="h-nakashima@users.noreply.github.com"
-
-# Machine-specific settings
-export WORK_PROXY="http://proxy.example.com:8080"
+cat ~/.config/chezmoi/chezmoi.toml
 ```
 
-### git-secrets による自動保護機能
+## セキュリティ
 
-このリポジトリは、[git-secrets](https://github.com/awslabs/git-secrets) を使用した pre-commit フックで構成されています。
-以下のパターンのいずれかが検出された場合、コミットは自動的にブロックされます：
+### 追跡対象のファイルに機密情報を絶対に置かない
 
-- AWS Access Keys と Secret Keys
-- SSH アクセス用の Identity files
-- Personal Access Tokens (例: GitHub)
-- AI Provider Tokens (例: OpenAI)
-- Chat Platform Tokens (例: Slack)
+このリポジトリは**公開されています**。APIキー・パスワード・トークン等は絶対にコミットしないでください。
 
-偶発的な漏洩を防ぐため、ローカルで作業する際はこのフックをインストールしたままにしてください。
+機密情報は以下のいずれかの場所に配置してください：
+- **`~/.extra`** — 自動で読み込まれ、chezmoi から除外されます。
+- **`~/.netrc`** — `~/.gitignore` によってグローバルに除外されます。
+- **`~/.env`** — `~/.gitignore` によってグローバルに除外されます。
+
+### git-secrets による自動的な安全対策
+
+`chezmoi apply` 実行時に [git-secrets](https://github.com/awslabs/git-secrets) を使った pre-commit フックが自動でインストールされます。以下のパターンが検出されるとコミットが自動的にブロックされます：
+
+- AWS Access Keys / Secret Keys
+- SSH アクセス用の identity files
+- Personal Access Tokens（GitHub 等）
+- AI Provider Tokens（OpenAI 等）
+- Chat プラットフォームのトークン（Slack 等）
 
 ## フィードバック
 
-提案や改善点は [Issueへどうぞ](https://github.com/h-nakashima/dotfiles/issues)！
+提案や改善点は [Issue へどうぞ](https://github.com/h-nakashima/dotfiles/issues)！

@@ -1,143 +1,141 @@
-# h-nakashima’s dotfiles
+# h-nakashima's dotfiles
 
 *Read this in other languages: [English](README.md), [日本語](README-ja.md).*
 
+## Overview
+
+A modern, fast development environment managed with [chezmoi](https://chezmoi.io/), powered by **Fish Shell** and **Starship** prompt.
+
+**Warning:** If you want to give these dotfiles a try, you should first fork this repository, review the code, and remove things you don't want or need. Don't blindly use my settings unless you know what that entails. Use at your own risk!
+
 ## Installation
 
-This repository is managed using [chezmoi](https://chezmoi.io/). 
+### Quick Install (New machine)
 
-**Warning:** If you want to give these dotfiles a try, you should first fork this repository, review the code, and remove things you don’t want or need. Don’t blindly use my settings unless you know what that entails. Use at your own risk!
-
-### Quick Install (Using chezmoi)
-
-If you just want to install these dotfiles on a new machine, `chezmoi` provides a one-liner to initialize and apply everything (including Oh My Zsh installation):
+Run a single command to install `chezmoi`, clone this repo, and apply everything automatically:
 
 ```bash
 sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply h-nakashima
 ```
 
-To update your environment with the latest changes from this repository later on:
+This will automatically:
+- Install Homebrew packages (from `Brewfile`)
+- Install **Fish** and **Starship**
+- Set Fish as the default shell (`chsh`)
+- Migrate your Zsh history to Fish history
+- Apply macOS settings (runs once)
+- Configure Git hooks (via git-secrets)
+
+To pull and apply the latest changes later:
 
 ```bash
 chezmoi update
 ```
 
-### Local Development Setup (Using ghq or custom path)
+### Local Development Setup
 
-If you clone this repository to a specific location (e.g., `~/git/github.com/h-nakashima/dotfiles`), you can tell `chezmoi` to use that as its source directory.
+If you clone this repository to a specific location (e.g. with `ghq`), tell `chezmoi` to use that as its source directory.
 
-1. Clone the repository.
-2. Create `~/.config/chezmoi/chezmoi.toml` with the following content:
+1. Clone the repository:
+   ```bash
+   ghq get h-nakashima/dotfiles
+   ```
+2. Create `~/.config/chezmoi/chezmoi.toml`:
    ```toml
    sourceDir = "~/git/github.com/h-nakashima/dotfiles"
-   
+
    [sourceVCS]
        autoCommit = false
        autoPush = false
    ```
-3. Apply the dotfiles to your home directory:
+3. Apply the dotfiles:
    ```bash
    chezmoi apply
    ```
 
-## Daily Workflow & Syncing
+## Shell Environment
 
-With `chezmoi`, you can maintain a clean separation between your home directory and this repository.
+This setup uses **Fish Shell** + **Starship** instead of Zsh.
 
-### Editing files
-To edit a dotfile (and automatically staging the change in the repo):
+| Feature | How it works |
+|---|---|
+| Prompt | Starship (shows git branch, language versions, etc.) |
+| History search | `Ctrl+R` via peco |
+| File search | `Ctrl+F` via peco |
+| Git shortcuts | `Ctrl+G, L` (ghq), `Ctrl+G, B` (branch), `Ctrl+G, A` (git add) |
+| Directory history | `Alt+←` / `Alt+→` (`prevd` / `nextd`) |
+| Aliases | `~/.config/fish/conf.d/aliases.fish` |
+| Environment variables | `~/.config/fish/conf.d/exports.fish` |
+
+## Daily Workflow
+
+### Editing a dotfile
 ```bash
-chezmoi edit ~/.zshrc
+chezmoi edit ~/.config/fish/conf.d/aliases.fish
 ```
 
-### Accidental local edits
-If you accidentally edited `~/.zshrc` directly and want to absorb those local changes back into this repository:
+### Absorbing accidental local edits back into the repo
 ```bash
-chezmoi add ~/.zshrc
+chezmoi add ~/.config/fish/conf.d/aliases.fish
+```
+
+### Pushing changes
+```bash
+cd ~/git/github.com/h-nakashima/dotfiles
+git add -A && git commit -m "your message" && git push
 ```
 
 ## Customization
 
-### Specify the `$PATH`
+### Adding custom commands without forking
 
-If `~/.path` exists, it will be sourced along with the other files, before any feature testing (such as detecting which version of `ls` is being used) takes place.
+If `~/.extra` exists, place personal or sensitive configuration here (it is never committed to the repo):
 
-Here’s an example `~/.path` file that adds `/usr/local/bin` to the `$PATH`:
-
-```bash
-export PATH="/usr/local/bin:$PATH"
-```
-
-### Add custom commands without creating a new fork
-
-If `~/.extra` exists, it will be sourced along with the other files. You can use this to add a few custom commands without the need to fork this entire repository, or to add commands you don’t want to commit to a public repository.
-
-My `~/.extra` looks something like this:
-
-```bash
-# Git credentials
-# Not in the repository, to prevent people from accidentally committing under my name
-GIT_AUTHOR_NAME="h-nakashima"
-GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
-git config --global user.name "$GIT_AUTHOR_NAME"
-GIT_AUTHOR_EMAIL="h-nakashima@users.noreply.github.com"
-GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
-git config --global user.email "$GIT_AUTHOR_EMAIL"
-```
-
-### Automated Setup
-
-When `chezmoi apply` is executed, it automatically handles everything behind the scenes:
-- **macOS Settings**: Sets sensible macOS defaults and basic tools (runs once).
-- **Homebrew Packages**: Installs everything in `Brewfile` (automatically reruns whenever `Brewfile` is updated).
-- **Oh My Zsh**: Ensures your shell environment is properly set up.
-
-## Security: Keeping credentials out of the repository
-
-### Rule: Never put secrets in tracked files
-
-This dotfiles repository is public. **NEVER commit any sensitive information such as API keys, passwords, or tokens.**
-
-Sensitive information should be placed in one of the following locations:
-
-- **`~/.extra`** — A file for sensitive data that is ignored by chezmoi.
-- **`~/.netrc`** — Globably excluded via `~/.gitignore` (`dot_gitignore`).
-- **`~/.env`** — Globably excluded via `~/.gitignore` (`dot_gitignore`).
-
-### Managing Secrets with `~/.extra`
-
-If `~/.extra` exists, it will be automatically sourced by `~/.zsh_profile`.
-Place your API keys and personal settings here:
-
-```bash
-# Example ~/.extra (Do NOT commit this file to the repository)
+```fish
+# ~/.extra (Fish syntax — never commit this file)
 
 # API Keys
-export OPENAI_API_KEY="sk-..."
-export ANTHROPIC_API_KEY="..."
-
-# Personal Git configuration
-export GIT_AUTHOR_NAME="h-nakashima"
-export GIT_AUTHOR_EMAIL="h-nakashima@users.noreply.github.com"
+set -gx OPENAI_API_KEY "sk-..."
+set -gx ANTHROPIC_API_KEY "..."
 
 # Machine-specific settings
-export WORK_PROXY="http://proxy.example.com:8080"
+set -gx WORK_PROXY "http://proxy.example.com:8080"
 ```
 
-### Automatic Safeguards with git-secrets
+### Personal vs Work configuration
 
-This repository is configured with a pre-commit hook using [git-secrets](https://github.com/awslabs/git-secrets).
-Commits will be automatically blocked if any of the following patterns are detected:
+At `chezmoi init` time, you will be asked:
+- Is this a personal machine? (`isPersonal`)
+- Your Git user name and email
 
-- AWS Access Keys and Secret Keys
-- Identity files used for Secure Shell access
-- Personal Access Tokens (e.g. GitHub)
-- AI Provider Tokens (e.g. OpenAI)
-- Chat Platform Tokens (e.g. Slack)
+This controls which sections of the `Brewfile` and `.gitconfig` are applied.
+You can review or edit these settings at any time:
 
-When working locally, please keep these hooks installed to prevent accidental leaks.
+```bash
+cat ~/.config/chezmoi/chezmoi.toml
+```
+
+## Security
+
+### Never put secrets in tracked files
+
+This repository is **public**. Never commit API keys, passwords, or tokens.
+
+Place sensitive data in:
+- **`~/.extra`** — Sourced automatically, ignored by chezmoi.
+- **`~/.netrc`** — Excluded via `~/.gitignore`.
+- **`~/.env`** — Excluded via `~/.gitignore`.
+
+### Automatic safeguards with git-secrets
+
+A pre-commit hook using [git-secrets](https://github.com/awslabs/git-secrets) is automatically installed via `chezmoi apply`. It blocks commits containing:
+
+- AWS Access Keys / Secret Keys
+- SSH identity files
+- Personal Access Tokens (GitHub, etc.)
+- AI Provider Tokens (OpenAI, etc.)
+- Chat platform tokens (Slack, etc.)
 
 ## Feedback
 
-Suggestions/improvements
-[welcome](https://github.com/h-nakashima/dotfiles/issues)!
+Suggestions/improvements [welcome](https://github.com/h-nakashima/dotfiles/issues)!
