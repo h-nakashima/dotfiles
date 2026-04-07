@@ -36,18 +36,10 @@ if test -d "$SDKMAN_DIR/candidates"
     end
 end
 
-# Environment initializers
-if status is-interactive
-    if command -sq anyenv
-        anyenv init - fish | source
-    end
-    if command -sq rbenv
-        rbenv init - fish | source
-    end
-    if command -sq pyenv
-        pyenv init - fish | source
-    end
-    if command -sq nodenv
-        nodenv init - fish | source
+# Environment initializers (PATH only — skip slow `*env init` and rehash on startup)
+set -l anyenv_root ~/.anyenv/envs
+if test -d $anyenv_root
+    for env_dir in $anyenv_root/*/
+        fish_add_path $env_dir/shims $env_dir/bin
     end
 end
