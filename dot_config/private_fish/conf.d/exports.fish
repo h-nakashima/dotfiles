@@ -27,6 +27,15 @@ end
 
 fish_add_path $HOME/.antigravity/antigravity/bin
 
+# SDKMAN (Java, Kotlin, Gradle etc.)
+# Note: `sdk` command requires bash. Use `bash -c "source ~/.sdkman/bin/sdkman-init.sh && sdk ..."` if needed.
+set -gx SDKMAN_DIR "$HOME/.sdkman"
+if test -d "$SDKMAN_DIR/candidates"
+    for candidate_bin in $SDKMAN_DIR/candidates/*/current/bin
+        fish_add_path $candidate_bin
+    end
+end
+
 # Environment initializers
 if status is-interactive
     if command -sq anyenv

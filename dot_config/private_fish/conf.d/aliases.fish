@@ -1,5 +1,6 @@
 # Shortcuts
 alias g="git"
+alias serena='uvx --from git+https://github.com/oraios/serena serena'
 
 
 alias l="ls -lF"
